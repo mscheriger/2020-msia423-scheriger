@@ -65,14 +65,14 @@
 ```
 ## Charter
 ### Vision
-Develop a profitable method for betting on European soccer matches
+Develop a profitable method for betting on European soccer matches.
 
 ### Mission
-Create a model using FIFA ratings to accurately predict outcomes of European soccer matches. Select wager and bookmaker such that expected profit is maximized, and test how this strategy performs in 2016. The data to be used contains match results for all European soccer matches from 2008 - 2016, corresponding FIFA ratings, and odds from 10 different bookmakers. The database can be found here: https://www.kaggle.com/hugomathien/soccer
+Create a model using FIFA ratings to accurately predict outcomes of European soccer matches. Select wager and bookmaker such that expected profit is maximized, and test how this strategy performs in 2016. The data to be used contains match results for all European soccer matches from 2008 - 2016, corresponding FIFA ratings, and odds from 10 different bookmakers. The database can be found here: https://www.kaggle.com/hugomathien/soccer.
 
 ### Success Criteria
 #### 1. Profit
-The project will truly be successful if we can demonstrate that a strategy using a models based on FIFA ratings can turn a profit.
+The project will truly be successful if we can demonstrate that a strategy using a model based on FIFA ratings can turn a profit.
 #### 2. CCR
 In order to turn a profit, the machine learning model must have a superior accuracy to the bookmakers. Therefore, maximizing CCR will lead to a higher profit. According to the data source, bookmakers have an accuracy of about 53% - any results greater than this should turn a profit. 
 
