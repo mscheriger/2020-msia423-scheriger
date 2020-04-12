@@ -77,7 +77,7 @@ Create an app where the user selects the European soccer league, and the app det
 #### 1. Profit
 The project will truly be successful if we can demonstrate that a strategy using a model based on FIFA ratings can turn a profit.
 #### 2. CCR
-In order to turn a profit, the machine learning model must have a superior accuracy to the bookmakers. Therefore, maximizing CCR will lead to a higher profit. According to the data source, bookmakers have an accuracy of about 53% - any results greater than this will be sufficient. 
+In order to turn a profit, the machine learning model must have a superior accuracy to the bookmakers. Therefore, maximizing CCR will lead to a higher profit. According to the data source, bookmakers correctly predict the outcome (win/lose/draw) 53% of the time. Any results greater than this will be sufficient. 
 
 ## Planning
 
@@ -96,25 +96,26 @@ Develop a model that allows the user to profitably gamble on European soccer mat
  - Story 2: Engineer features such as FIFA rating by position, moving average of wins, goals for, goals against, etc.
  - Story 3: Create functionality to train model on data from 2008 - 2014, and test on 2015, as well as predicting results for 2016. 
  - Story 4: Develop functionality to train model based on league selected by user. 
- 
+ - Story 5: Iterate in order to improve model until threshold of 53% CCR has been met.
+  
 #### Epic 3. App: Create application to show user which outcomes to bet on.
  - Story 1. Create interface to display model predictions as well as actual outcomes.
  - Story 2. Add additional functionality to allow user to select which European league to predict. 
  - Story 3. Display total net profit if one unit was wagered on every game.
- - Story 4. Use D3 to visualize which matches the model outperformed the bookkeepers, as well as improvement can be made.
- 
+ - Story 4. Use D3 to visualize matches where the model outperformed the bookkeepers, as well as improvements that can be made. 
 ## Backlog
 In order of priority:
 1. Pipeline.Story1 (4 points) - PLANNED
 2. Pipeline.Story2 (1 point) - PLANNED
-3. Pipeline.Story1 (2 points) - PLANNED
+3. Model.Story1 (2 points) - PLANNED
 3. Model.Story2 (4 points) - PLANNED
 4. Pipeline.Story3 (8 points)
 5. Model.Story3 (4 points)
 6. Model.Story4 (2 points)
-7. App.Story1 (4 points)
-8. App.Story2 (4 points)
-9. App.Story3 (2 points)
+7. Model.Story5 (4 points)
+8. App.Story1 (8 points)
+9. App.Story2 (4 points)
+10. App.Story3 (2 points)
 
 ## Icebox
 1. Pipeline.Story4
