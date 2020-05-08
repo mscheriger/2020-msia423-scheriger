@@ -1,9 +1,6 @@
-import argparse
-
-from src.add_songs import create_db, add_track
 
 if __name__ == '__main__':
-
+    '''
     # Add parsers for both creating a database and adding songs to it
     parser = argparse.ArgumentParser(description="Create and/or add data to database")
     subparsers = parser.add_subparsers()
@@ -28,3 +25,5 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     args.func(args)
+    '''
+    src.source_s3

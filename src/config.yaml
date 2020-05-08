@@ -1,0 +1,5 @@
+source_s3:
+    data_path: '../data/database.db'
+    bucket_name: 'nw-scheriger-s3'
+    database_name: 'database.db'
+    location: 'us-east-2'
