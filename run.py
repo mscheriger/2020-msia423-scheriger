@@ -1,4 +1,5 @@
 from src.source_s3 import source_bucket, push_data
+from src.rds import create_table
 import yaml 
 import logging.config
 import argparse
@@ -22,7 +23,11 @@ if __name__=='__main__':
     config_s3 = config['source_s3']
     
     ###CREATE BUCKET AND PUSH DATABASE TO S3
+    '''
     if args.create_bucket:
         source_bucket(config_s3['bucket_name'],config_s3['location'])
     push_data(config_s3['data_path'],config_s3['bucket_name'],config_s3['database_name'])
+    '''
 
+    ###Create RDS Schema
+    create_table()

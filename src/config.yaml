@@ -3,3 +3,5 @@ source_s3:
     bucket_name: 'nw-scheriger-s3'
     database_name: 'test'
     location: 'us-east-2'
+
+rds:
