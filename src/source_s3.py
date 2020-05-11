@@ -6,8 +6,8 @@ import os
 import boto3
 from botocore.exceptions import ClientError
 
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-logger.setLevel("INFO")
 
 def source_bucket(bucket_name,location='us-east-2'):
     '''
@@ -17,7 +17,8 @@ def source_bucket(bucket_name,location='us-east-2'):
     @param location:    Location server to push the bucket to.
     @return:            None
     '''
-    s3 = boto3.resource("s3")
+    session = boto3.session.Session(aws_access_key_id=os.environ.get("aws_access_key_id"),aws_secret_access_key=os.environ.get("aws_secret_access_key"))
+    s3 = session.resource("s3")
     try:
         s3.create_bucket(
                 Bucket=bucket_name,
@@ -36,11 +37,16 @@ def push_data(data_path,bucket_name,data_name):
     @param data_name:   Alias of data that will be pushed in S3.
     @return:            None
     '''
-    s3 = boto3.client('s3')
+    session = boto3.session.Session(aws_access_key_id=os.environ.get("aws_access_key_id"),aws_secret_access_key=os.environ.get("aws_secret_access_key"))
+    s3 = session.client('s3')
     try:
+        logger.info('Data upload has begun')
         response = s3.upload_file(data_path,bucket_name,data_name)
+        logger.info('Data upload has completed successfully')
     except ClientError as e:
         logging.error(e)
+    except FileNotFoundError as e1:
+        logging.error("Filepath cannot be found.")
     pass
 
 if __name__=='__main__':
