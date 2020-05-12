@@ -5,6 +5,7 @@ import yaml
 import os
 import boto3
 from botocore.exceptions import ClientError
+from boto3.exceptions import S3UploadFailedError
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -47,6 +48,8 @@ def push_data(data_path,bucket_name,data_name):
         logging.error(e)
     except FileNotFoundError as e1:
         logging.error("Filepath cannot be found.")
+    except S3UploadFailedError as e2:
+        logging.error('The specified bucket does not exist. Try using the --create_bucket argument.')
     pass
 
 if __name__=='__main__':

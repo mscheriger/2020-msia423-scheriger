@@ -9,7 +9,7 @@
 - [Backlog](#backlog)
 - [Icebox](#icebox)
 - [Running the app](#running-the-app)
-  * [1. Initialize the database](#1-initialize-the-database)
+  * [1. Download the Data](#download-the-data)
     + [Create the database with a single song](#create-the-database-with-a-single-song)
     + [Adding additional songs](#adding-additional-songs)
     + [Defining your engine string](#defining-your-engine-string)
@@ -122,102 +122,39 @@ In order of priority:
 2. App.Story4
 
 ## Running the app
-### 1. Initialize the database 
 
-#### Create the database with a single song 
-To create the database in the location configured in `config.py` with one initial song, run: 
+### 1. Download the data
+Since the data is located on Kaggle, you will have to download it directly from the website, located here: https://www.kaggle.com/hugomathien/soccer#database.sqlite
 
-`python run.py create_db --engine_string=<engine_string> --artist=<ARTIST> --title=<TITLE> --album=<ALBUM>`
+Scroll towards the bottom of the page until you see the "database.sqlite" table. On the right hand side, click the download button. Once downloaded, extract the data from the zip file, and place "database.db" into the data directory of this repo.
 
-By default, `python run.py create_db` creates a database at `sqlite:///data/tracks.db` with the initial song *Radar* by Britney spears. 
-#### Adding additional songs 
-To add an additional song:
+### 2. Create Bucket and Push to S3 
+First, open src/config.yaml and view the "source_s3" paramaters. Change data_path to the location of the data to be uploaded. Change bucket_name to the name of the S3 bucket that you will upload the data to (Note: if you are creating the bucket from scratch, name the bucket what you would like it to be called). Change database_name to what you would like the database to be called once in S3. If the bucket you are using is in a different location than "us-east-2", change the location parameter as well.
 
-`python run.py ingest --engine_string=<engine_string> --artist=<ARTIST> --title=<TITLE> --album=<ALBUM>`
+In order to access S3, your aws username and password must be available as environment variables. Create a file named config.env in the root of the repo. Write the following:
 
-By default, `python run.py ingest` adds *Minor Cause* by Emancipator to the SQLite database located in `sqlite:///data/tracks.db`.
+aws_access_key_id=<YOUR KEY HERE>
+aws_secret_access_key=<YOUR SECRET KEY HERE>
 
-#### Defining your engine string 
-A SQLAlchemy database connection is defined by a string with the following format:
+### 3. Create RDS schema
+Once again, open src/config.yaml. This time view the "rds" parameters. If you would like to create the schema in RDS, leave local=False. If you would like to save it locally, switch local to True. If you choose to save locally, change the db_path parameter to the location you would like to save the schema. 
 
-`dialect+driver://username:password@host:port/database`
+Open up the config.env file you created in step two. Add the following environment variables.
+MYSQL_USER=<YOUR USER NAME>
+MYSQL_PASSWORD=<YOUR PASSWORD>
+MYSQL_HOST=msia423-project.cpqvmnszxomo.us-east-2.rds.amazonaws.com
+MYSQL_PORT=3306
+MYSQL_NAME=fifa
 
-The `+dialect` is optional and if not provided, a default is used. For a more detailed description of what `dialect` and `driver` are and how a connection is made, you can see the documentation [here](https://docs.sqlalchemy.org/en/13/core/engines.html). We will cover SQLAlchemy and connection strings in the SQLAlchemy lab session on 
-##### Local SQLite database 
+### 4. Run the Dockerfile
+Now that the parameters are set, you can create and run the Dockerfile. First, build the image, using the following command.
 
-A local SQLite database can be created for development and local testing. It does not require a username or password and replaces the host and port with the path to the database file: 
+docker build -t fifa .
 
-```python
-engine_string='sqlite:///data/tracks.db'
+Once the Dockerfile is built, run the following command to push the raw data to S3 and create a table in RDS:
 
-```
+docker run --mount type=bind,source="$(pwd)",target=/myapp --env-file=config.env fifa
 
-The three `///` denote that it is a relative path to where the code is being run (which is from the root of this directory).
+If your bucket does not exist and you would like to create one, add -c to the end of the above command.
 
-You can also define the absolute path with four `////`, for example:
-
-```python
-engine_string = 'sqlite://///Users/cmawer/Repos/2020-MSIA423-template-repository/data/tracks.db'
-```
-
-
-### 2. Configure Flask app 
-
-`config/flaskconfig.py` holds the configurations for the Flask app. It includes the following configurations:
-
-```python
-DEBUG = True  # Keep True for debugging, change to False when moving to production 
-LOGGING_CONFIG = "config/logging/local.conf"  # Path to file that configures Python logger
-HOST = "0.0.0.0" # the host that is running the app. 0.0.0.0 when running locally 
-PORT = 5000  # What port to expose app on. Must be the same as the port exposed in app/Dockerfile 
-SQLALCHEMY_DATABASE_URI = 'sqlite:///data/tracks.db'  # URI (engine string) for database that contains tracks
-APP_NAME = "penny-lane"
-SQLALCHEMY_TRACK_MODIFICATIONS = True 
-SQLALCHEMY_ECHO = False  # If true, SQL for queries made will be printed
-MAX_ROWS_SHOW = 100 # Limits the number of rows returned from the database 
-```
-
-### 3. Run the Flask app 
-
-To run the Flask app, run: 
-
-```bash
-python app.py
-```
-
-You should now be able to access the app at http://0.0.0.0:5000/ in your browser.
-
-## Running the app in Docker 
-
-### 1. Build the image 
-
-The Dockerfile for running the flask app is in the `app/` folder. To build the image, run from this directory (the root of the repo): 
-
-```bash
- docker build -f app/Dockerfile -t pennylane .
-```
-
-This command builds the Docker image, with the tag `pennylane`, based on the instructions in `app/Dockerfile` and the files existing in this directory.
- 
-### 2. Run the container 
-
-To run the app, run from this directory: 
-
-```bash
-docker run -p 5000:5000 --name test pennylane
-```
-You should now be able to access the app at http://0.0.0.0:5000/ in your browser.
-
-This command runs the `pennylane` image as a container named `test` and forwards the port 5000 from container to your laptop so that you can access the flask app exposed through that port. 
-
-If `PORT` in `config/flaskconfig.py` is changed, this port should be changed accordingly (as should the `EXPOSE 5000` line in `app/Dockerfile`)
-
-### 3. Kill the container 
-
-Once finished with the app, you will need to kill the container. To do so: 
-
-```bash
-docker kill test 
-```
-
-where `test` is the name given in the `docker run` command.
+docker run --mount type=bind,source="$(pwd)",target=/myapp --env-file=config.env fifa -c
