@@ -140,8 +140,8 @@ aws_secret_access_key=<YOUR SECRET KEY HERE>
 Once again, open src/config.yaml. This time view the "rds" parameters. If you would like to create the schema in RDS, leave local=False. If you would like to save it locally, switch local to True. If you choose to save locally, change the db_path parameter to the location you would like to save the schema. 
 
 Open up the config.env file you created in step two. Add the following environment variables.
-MYSQL_USER=<YOUR USER NAME>
-MYSQL_PASSWORD=<YOUR PASSWORD>
+MYSQL_USER=<YOUR USER NAME> ##Instructors should be 'msia423instructor'. QA (Josh), yours is 'msia423qa'
+MYSQL_PASSWORD=<YOUR PASSWORD> ##This should be 'tms5465', for both instructors and QA
 MYSQL_HOST=msia423-project.cpqvmnszxomo.us-east-2.rds.amazonaws.com
 MYSQL_PORT=3306
 MYSQL_NAME=fifa
