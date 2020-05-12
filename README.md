@@ -10,16 +10,9 @@
 - [Icebox](#icebox)
 - [Running the app](#running-the-app)
   * [1. Download the Data](#download-the-data)
-    + [Create the database with a single song](#create-the-database-with-a-single-song)
-    + [Adding additional songs](#adding-additional-songs)
-    + [Defining your engine string](#defining-your-engine-string)
-      - [Local SQLite database](#local-sqlite-database)
-  * [2. Configure Flask app](#2-configure-flask-app)
-  * [3. Run the Flask app](#3-run-the-flask-app)
-- [Running the app in Docker](#running-the-app-in-docker)
-  * [1. Build the image](#1-build-the-image)
-  * [2. Run the container](#2-run-the-container)
-  * [3. Kill the container](#3-kill-the-container)
+  * [2. Create Bucket and Push to S3](#2-create-bucket-and-push-to-s3)
+  * [3. Create RDS schema](#3-create-rds-schema)
+  * [4. Run the Dockerfile](#4-run_the_dockerfile)
 
 <!-- tocstop -->
 
