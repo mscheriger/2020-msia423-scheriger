@@ -6,7 +6,7 @@ __pycache__/
 .idea/
 .log
 .ipynb_checkpoints/
-config.env
+*.env
 
 data/*
 !data/sample/
