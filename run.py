@@ -11,7 +11,7 @@ if __name__=='__main__':
     parser = argparse.ArgumentParser(description="Create and/or add data to database")
     parser.add_argument('-c', '--create_bucket', action='store_true', default=False, help='If given, a new bucket will be created.')
     parser.add_argument('-p', '--push_to_bucket', action='store_true', default=False, help='If given, data will be pushed to S3 bucket.')
-    parser.add_argument('-r', '--rds_schema', action='store_true', default=False, help='If given, schema for database will be created.'
+    parser.add_argument('-r', '--rds_schema', action='store_true', default=False, help='If given, schema for database will be created.')
     args = parser.parse_args()
 
     ###READ CONFIG FILE
