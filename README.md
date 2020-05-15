@@ -144,10 +144,14 @@ Now that the parameters are set, you can create and run the Dockerfile. First, b
 
 docker build -t fifa .
 
-Once the Dockerfile is built, run the following command to push the raw data to S3 and create a table in RDS:
-
-docker run --mount type=bind,source="$(pwd)",target=/myapp --env-file=config.env fifa
-
-If your bucket does not exist and you would like to create one, add -c to the end of the above command.
+Once the Dockerfile is built, run the following command to create a bucket in S3:
 
 docker run --mount type=bind,source="$(pwd)",target=/myapp --env-file=config.env fifa -c
+
+To push data to a bucket that already exists, use the 'p' argument:
+
+docker run --mount type=bind,source="$(pwd)",target=/myapp --env-file=config.env fifa -p
+
+Finally, to create a database schema, use the 'r' argument:
+
+docker run --mount type=bind,source="$(pwd)",target=/myapp --env-file=config.env fifa -r
