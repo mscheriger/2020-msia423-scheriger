@@ -3,7 +3,7 @@ source_s3:
     bucket_name: 'nw-scheriger-s3'
     database_name: 'fifa_raw'
     location: 'us-east-2'
-
+    local_location: 'data/fifa_s3.db'
 rds:
     local: False 
     db_path: 'data/temp.db'

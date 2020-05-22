@@ -1,4 +1,4 @@
-from src.source_s3 import source_bucket, push_data
+from src.source_s3 import source_bucket, push_data, get_data
 from src.rds import create_table
 import yaml 
 import logging.config
@@ -11,6 +11,7 @@ if __name__=='__main__':
     parser = argparse.ArgumentParser(description="Create and/or add data to database")
     parser.add_argument('-c', '--create_bucket', action='store_true', default=False, help='If given, a new bucket will be created.')
     parser.add_argument('-p', '--push_to_bucket', action='store_true', default=False, help='If given, data will be pushed to S3 bucket.')
+    parser.add_argument('-f', '--fetch_data', action='store_true', default=False, help='If given, data will be fetched from S3 bucket.')
     parser.add_argument('-r', '--rds_schema', action='store_true', default=False, help='If given, schema for database will be created.')
     args = parser.parse_args()
 
@@ -29,6 +30,8 @@ if __name__=='__main__':
         source_bucket(config_s3['bucket_name'],config_s3['location'])
     if args.push_to_bucket:
         push_data(config_s3['data_path'],config_s3['bucket_name'],config_s3['database_name'])
+    if args.fetch_data:
+        get_data(config_s3['bucket_name'],config_s3['database_name'],config_s3['local_location'])
 
     ###Create RDS Schema
     if args.rds_schema:
