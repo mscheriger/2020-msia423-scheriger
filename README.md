@@ -122,7 +122,7 @@ Since the data is located on Kaggle, you will have to download it directly from 
 Scroll towards the bottom of the page until you see the "database.sqlite" table. On the right hand side, click the download button. Once downloaded, extract the data from the zip file, and place "database.db" into the data directory of this repo.
 
 ### 2. Create Bucket and Push to S3 
-First, open src/config.yaml and view the "source_s3" paramaters. Change data_path to the location of the data to be uploaded. Change bucket_name to the name of the S3 bucket that you will upload the data to (Note: if you are creating the bucket from scratch, name the bucket what you would like it to be called). Change database_name to what you would like the database to be called once in S3. If the bucket you are using is in a different location than "us-east-2", change the location parameter as well.
+First, make sure you are in the root directory of the repository. Then, open src/config.yaml and view the "source_s3" paramaters. Change data_path to the location of the data to be uploaded. Change bucket_name to the name of the S3 bucket that you will upload the data to (Note: if you are creating the bucket from scratch, name the bucket what you would like it to be called). Change database_name to what you would like the database to be called once in S3. If the bucket you are using is in a different location than "us-east-2", change the location parameter as well.
 
 In order to access S3, your aws username and password must be available as environment variables. Create a file named config.env in the root of the repo. Write the following:
 

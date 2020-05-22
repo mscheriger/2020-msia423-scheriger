@@ -57,6 +57,6 @@ def create_table(local=False,local_location=None):
         Base.metadata.create_all(engine)
         logger.info('Tables successfully created')
     except OperationalError as e:
-        logger.error('Cannot connect to the server. Double check your environment variables.')
+        logger.error('Cannot connect to the server. Double check your environment variables and make sure you are connected to the NU VPN.')
     except InternalError as e1:
         logger.error('Cannot find the database. Check the MYSQL_NAME environment variable.')
