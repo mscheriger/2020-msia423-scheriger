@@ -93,7 +93,7 @@ def ewma_score(match_df,a=.5,p=4):
     all_teams = all_teams.drop(columns='outcome')
     all_teams['ewma'] = all_teams.groupby('team_id')['shift_ewma'].transform(lambda x: x.shift(1))
     all_teams = all_teams.fillna(0)
-    all_teams['ewma'] = all_teams.groupby(['team_id','season'])['ewma'].transform(lambda v: v.ewm(alpha=a,min_periods=p).mean())
+    all_teams['ewma'] = all_teams.groupby(['team_id'])['ewma'].transform(lambda v: v.ewm(alpha=a,min_periods=p).mean())
     all_teams = all_teams.fillna(0)
     all_teams = all_teams.drop(columns=['shift_ewma'])
     check_rows = match_df.shape[0]
