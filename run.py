@@ -1,5 +1,8 @@
 from src.source_s3 import source_bucket, push_data, get_data
-from src.rds import create_table
+from src.rds import create_table, add_data
+from src.feat_eng import run_all_feat_eng
+from src.model import run_all_model
+from src.clean_predictions import clean_pred
 import yaml 
 import logging.config
 import argparse
@@ -13,6 +16,10 @@ if __name__=='__main__':
     parser.add_argument('-p', '--push_to_bucket', action='store_true', default=False, help='If given, data will be pushed to S3 bucket.')
     parser.add_argument('-f', '--fetch_data', action='store_true', default=False, help='If given, data will be fetched from S3 bucket.')
     parser.add_argument('-r', '--rds_schema', action='store_true', default=False, help='If given, schema for database will be created.')
+    parser.add_argument('-e', '--engineer', action='store_true', default=False, help='If given, performs data cleaning and feature engineering.')
+    parser.add_argument('-m', '--model', action='store_true', default=False, help='If given, runs model on clean data.')
+    parser.add_argument('-x', '--clean_preds', action='store_true', default=False, help='If given, clean predictions from model')
+    parser.add_argument('-a', '--add_data', action='store_true', default=False, help='If given, adds data to the RDS instance')
     args = parser.parse_args()
 
     ###READ CONFIG FILE
@@ -23,8 +30,11 @@ if __name__=='__main__':
         logger.error('Cannot find Config File')
         exit()
     config_s3 = config['source_s3']
-    config_rds = config['rds'] 
-    
+    config_rds = config['rds']
+    config_feat = config['feat_eng']
+    config_model = config['model']
+    config_pred = config['clean_pred']
+
     ###CREATE BUCKET AND PUSH DATABASE TO S3
     if args.create_bucket:
         source_bucket(config_s3['bucket_name'],config_s3['location'])
@@ -36,3 +46,19 @@ if __name__=='__main__':
     ###Create RDS Schema
     if args.rds_schema:
         create_table(local=config_rds['local'],local_location=config_rds['db_path'])
+
+    ###Data CLEANING AND FEATURE ENGINEERING
+    if args.engineer:
+        run_all_feat_eng(config_feat['data_location'],config_feat['final_location'],config_feat['league_ids'],config_feat['droplabels'])
+
+    ###Run the model
+    if args.model:
+        run_all_model(config_model['data_location'],config_model['keep_cols'],config_model['season'],config_model['params'],config_model['objective'],config_model['num_class'],config_model['seed_xgb'],config_model['cv'],config_model['seed_cv'],config_model['final_location'])
+    
+    ###Clean predictions
+    if args.clean_preds:
+        clean_pred(config_pred['pred_location'],config_pred['data_location'],config_pred['csv_location'],config_pred['home_lines'],config_pred['draw_lines'],config_pred['away_lines'],config_pred['db_location'],config_pred['keep_cols'])
+    
+    ###Add data to RDS
+    if args.add_data:
+        add_data(config_rds['pred_location'],local=config_rds['local'],local_location=config_rds['db_path'])
