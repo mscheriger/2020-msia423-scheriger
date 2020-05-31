@@ -54,7 +54,7 @@ def create_table(local=False,local_location=None):
         password = os.environ.get("MYSQL_PASSWORD")
         host = os.environ.get("MYSQL_HOST")
         port = os.environ.get("MYSQL_PORT")
-        database = os.environ.get("MYSQL_NAME")
+        database = os.environ.get("MYSQL_DATABASE")
         engine_string = "{}://{}:{}@{}:{}/{}".format(conn_type, user, password, host, port, database)
     try:
         # set up mysql connection
@@ -83,7 +83,7 @@ def add_data(df_location,local=False,local_location=None):
         password = os.environ.get("MYSQL_PASSWORD")
         host = os.environ.get("MYSQL_HOST")
         port = os.environ.get("MYSQL_PORT")
-        database = os.environ.get("MYSQL_NAME")
+        database = os.environ.get("MYSQL_DATABASE")
         engine_string = "{}://{}:{}@{}:{}/{}".format(conn_type, user, password, host, port, database)
     try:
         # set up mysql connection
@@ -91,7 +91,7 @@ def add_data(df_location,local=False,local_location=None):
     except OperationalError as e:
         logger.error('Cannot connect to the server. Double check your environment variables and make sure you are connected to the NU VPN.')
     except InternalError as e1:
-        logger.error('Cannot find the database. Check the MYSQL_NAME environment variable.')
+        logger.error('Cannot find the database. Check the MYSQL_DATABASE environment variable.')
 
     Session = sessionmaker(bind=engine)
     session = Session()

@@ -2,42 +2,78 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link href="static/basic.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='basic.css')}}" rel="stylesheet">
 </head>
 
 <body>
     <h3>
-         <a href = "{{ url_for('index') }}">Penny Lane Music Recommender</a>
+         <a href = "{{ url_for('index') }}">Soccer Predictions for 2016</a>
     </h3>
 
+    <h4>
+	    <a>{{ league }}</a>
+    </h4>
+    <h4>
+        {% if total >= 0 %}
+            <td>{{ "Total Profit: ${:,.2f}".format(total) }}</td>
+        {% else %}
+            <td>{{ "Total Profit: -${:,.2f}".format(total*(-1)) }}</td>
+        {% endif %}
+    </h4>
     <hr/>
+    
+    <form action="{{ url_for('choose_table') }}" method=post>
+         <dl>
+	     <input type=submit name=button value="Premier League">
+	     <input type=submit name=button value="Bundesliga">
+             <input type=submit name=button value="French Ligue 1">
+             <input type=submit name=button value="La Liga">
+             <input type=submit name=button value="Serie A">
+	 </dl>
+    </form> 
+    
     <table>
          <thead>
             <tr>
-               <th>Title</th>
-               <th>Artist</th>
-               <th>Album</th>
+               <th>Home</th>
+               <th>Away</th>
+               <th>Date</th>
+	       <th>Home Line</th>
+	       <th>Away Line</th>
+               <th>Draw Line</th>
+               <th>Home Prob</th>
+               <th>Away Prob</th>
+	       <th>Draw Prob</th>
+	       <th>Winner</th>
+	       <th>Bet On</th>
+	       <th>Exp. Profit</th>
+	       <th>Actual Profit</th>
             </tr>
          </thead>
 
          <tbody>
-            {% for track in tracks %}
+            {% for bet in bets %}
                <tr>
-                   <td>{{ track.title }}</td>
-                   <td>{{ track.artist }}</td>
-                   <td>{{ track.album }}</td>
-               </tr>
+                   <td>{{ bet.home_team }}</td>
+                   <td>{{ bet.away_team }}</td>
+                   <td>{{ bet.date }}</td>
+		   <td>{{ bet.home_line }}</td>
+                   <td>{{ bet.away_line }}</td>
+                   <td>{{ bet.draw_line }}</td>
+                   <td>{{ '{0:.2f}%'.format(bet.prob_home * 100) }}</td>
+                   <td>{{ '{0:.2f}%'.format(bet.prob_away * 100) }}</td>
+                   <td>{{ '{0:.2f}%'.format(bet.prob_draw * 100) }}</td>
+		   <td>{{ bet.outcome }}</td>
+                   <td>{{ bet.bet_on }}</td>
+		   <td>{{ "${:,.2f}".format(bet.exp_profit) }}</td>
+		   {% if bet.profit >= 0 %}
+		       <td>{{ "${:,.2f}".format(bet.profit) }}</td>
+		   {% else %}
+		       <td>{{ "-${:,.2f}".format(bet.profit*(-1)) }}</td>
+		   {% endif %}
+               </tr> 
             {% endfor %}
          </tbody>
       </table>
-      <form action="{{ url_for('add_entry') }}" method=post class=add-entry>
-      <dl>
-        <input type=text size=15 name=title placeholder="Title">
-        <input type=text size=15 name=artist placeholder="Artist">
-        <input type=text size=15 name=album placeholder="Album">
-        <input type=submit value=Add>
-      </dl>
-    </form>
-
 </body>
 </html>

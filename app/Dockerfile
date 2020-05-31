@@ -13,6 +13,6 @@ COPY . /app
 
 RUN chmod +x app/boot.sh
 
-EXPOSE 5000
+EXPOSE 5000 
 
-CMD ["./app/boot.sh"]
+ENTRYPOINT ["python3"]
