@@ -53,7 +53,7 @@ def run_model(train,params,objective,num_class,xgb_seed,folds,cv_seed):
     logger.info('Cross validation accuracy is {}'.format(xgb_cv.best_score_))
     return xgb_cv
 
-def predictions(xgb,test,final_location):
+def predictions(xgb,test):
     '''
     Function makes predictions and saves these into a CSV
 
@@ -72,7 +72,7 @@ def predictions(xgb,test,final_location):
     acc = (test.outcome==test.prediction).sum()/test.shape[0]
     logging.info('Test accuracy is {}'.format(acc))
     test = test[['id','away_prob','draw_prob','home_prob','prediction']]
-    test.to_csv(final_location,index=False)
+    return test
 
 def run_all_model(data_location,keep_cols,season,params,objective,num_class,xgb_seed,folds,cv_seed,final_location):
     '''
@@ -92,4 +92,5 @@ def run_all_model(data_location,keep_cols,season,params,objective,num_class,xgb_
 
     matches, train, test = prep_data(data_location,keep_cols,season)
     xgb = run_model(train,params,objective,num_class,xgb_seed,folds,cv_seed)
-    predictions(xgb,test,final_location)
+    predicted = predictions(xgb,test)
+    predicted.to_csv(final_location,index=False)

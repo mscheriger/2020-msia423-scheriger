@@ -11,11 +11,15 @@ def get_table(cur,table):
     :param table: String indicating the name of the table to fetch.
     :return:      Pandas DataFrame containing the table.
     '''
-    query = 'SELECT * FROM ' + table + ';'
-    df = pd.DataFrame(cur.execute(query).fetchall())
-    names = list(map(lambda x: x[0], cur.description))
-    dic = dict(zip(range(len(names)), names))
-    return df.rename(columns=dic)
+    try:
+        query = 'SELECT * FROM ' + table + ';'
+        df = pd.DataFrame(cur.execute(query).fetchall())
+        names = list(map(lambda x: x[0], cur.description))
+        dic = dict(zip(range(len(names)), names))
+        return df.rename(columns=dic)
+    except sqlite3.OperationalError as e:
+        logging.error(e)
+        return None
 
 def winner(df):
     '''
@@ -25,12 +29,11 @@ def winner(df):
     :return:   String indicating if match winner was "Home", "Away", or "Draw"
 
     '''
-    assert df.home_team_goal is not None and df.away_team_goal is not None
     if df.home_team_goal > df.away_team_goal:
         answer = 'Home'
     elif df.home_team_goal < df.away_team_goal:
         answer = 'Away'
-    else:
+    else:    
         answer = 'Draw'
     return answer
 
@@ -62,16 +65,20 @@ def eng_ratings(match_df):
 
     :return:         Original dataframe with additional columns of averages for home and away team.
     '''
-    final_df = match_df.copy()
-    final_df['home_overall_rating'] = match_df[['hp1','hp2','hp3','hp4','hp5','hp6','hp7','hp8','hp9','hp10','hp11']].mean(axis=1)
-    final_df['away_overall_rating'] = match_df[['ap1','ap2','ap3','ap4','ap5','ap6','ap7','ap8','ap9','ap10','ap11']].mean(axis=1)
-    final_df['home_def_rating'] = match_df[['hp2','hp3','hp4','hp5']].mean(axis=1)
-    final_df['away_def_rating'] = match_df[['ap2','ap3','ap4','ap5']].mean(axis=1)
-    final_df['home_mid_rating'] = match_df[['hp6','hp7','hp8']].mean(axis=1)
-    final_df['away_mid_rating'] = match_df[['ap6','ap7','ap8']].mean(axis=1)
-    final_df['home_off_rating'] = match_df[['hp9','hp10','hp11']].mean(axis=1)
-    final_df['away_off_rating'] = match_df[['ap9','ap10','ap11']].mean(axis=1)
-    return final_df
+    try: 
+        final_df = match_df.copy()
+        final_df['home_overall_rating'] = match_df[['hp1','hp2','hp3','hp4','hp5','hp6','hp7','hp8','hp9','hp10','hp11']].mean(axis=1)
+        final_df['away_overall_rating'] = match_df[['ap1','ap2','ap3','ap4','ap5','ap6','ap7','ap8','ap9','ap10','ap11']].mean(axis=1)
+        final_df['home_def_rating'] = match_df[['hp2','hp3','hp4','hp5']].mean(axis=1)
+        final_df['away_def_rating'] = match_df[['ap2','ap3','ap4','ap5']].mean(axis=1)
+        final_df['home_mid_rating'] = match_df[['hp6','hp7','hp8']].mean(axis=1)
+        final_df['away_mid_rating'] = match_df[['ap6','ap7','ap8']].mean(axis=1)
+        final_df['home_off_rating'] = match_df[['hp9','hp10','hp11']].mean(axis=1)
+        final_df['away_off_rating'] = match_df[['ap9','ap10','ap11']].mean(axis=1)
+        return final_df
+    except:
+        logging.error("Error occurred - check dataframe has all necessary columns")
+        return None
 
 def ewma_score(match_df,a=.5,p=4):
     '''

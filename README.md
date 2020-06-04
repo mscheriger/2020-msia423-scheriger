@@ -146,12 +146,12 @@ docker build -t fifa .
 
 Once the Dockerfile is built, run the following command to create a bucket in S3:
 
-docker run --mount type=bind,source="$(pwd)",target=/myapp --env-file=config.env fifa -c
+docker run --mount type=bind,source="$(pwd)",target=/myapp --env-file=config.env fifa run.py -c
 
 To push data to a bucket that already exists, use the 'p' argument:
 
-docker run --mount type=bind,source="$(pwd)",target=/myapp --env-file=config.env fifa -p
+docker run --mount type=bind,source="$(pwd)",target=/myapp --env-file=config.env fifa run.py -p
 
 Finally, to create a database schema, use the 'r' argument:
 
-docker run --mount type=bind,source="$(pwd)",target=/myapp --env-file=config.env fifa -r
+docker run --mount type=bind,source="$(pwd)",target=/myapp --env-file=config.env fifa run.py -r
