@@ -11,8 +11,6 @@ RUN pip3 install -r requirements.txt
 
 COPY . /app
 
-RUN chmod +x app/boot.sh
-
 EXPOSE 5000 
 
 ENTRYPOINT ["python3"]

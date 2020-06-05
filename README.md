@@ -13,7 +13,7 @@
   * [2. Create Bucket and Push to S3](#2-create-bucket-and-push-to-s3)
   * [3. Create RDS schema](#3-create-rds-schema)
   * [4. Run the Dockerfile](#4-run_the_dockerfile)
-
+  * [5. Run the App](#5-run_the_app)
 <!-- tocstop -->
 
 ## Directory structure 
@@ -141,17 +141,41 @@ MYSQL_NAME=fifa
 
 ### 4. Run the Dockerfile
 Now that the parameters are set, you can create and run the Dockerfile. First, build the image, using the following command.
-
+```bash
 docker build -t fifa .
+```
 
-Once the Dockerfile is built, run the following command to create a bucket in S3:
+In order to actually run the Dockerfile, type the following:
 
-docker run --mount type=bind,source="$(pwd)",target=/myapp --env-file=config.env fifa run.py -c
+```bash
+docker run --mount type=bind,source="$(pwd)",target=/myapp --env-file=config.env fifa run.py
+```
 
-To push data to a bucket that already exists, use the 'p' argument:
+Running the above won't acually run anything - you have to pass specific arguments. See the arguments below.
 
-docker run --mount type=bind,source="$(pwd)",target=/myapp --env-file=config.env fifa run.py -p
+-c: create a bucket in S3
+-p: Push data to S3 bucket
+-f: Fetch the data from the S3 bucket 
+-r: Create the RDS database schema
+-e: Perform feature engineering
+-m: Run the model
+-x: Clean the predictions from the model
+-a: Add the data to the RDS instance
 
-Finally, to create a database schema, use the 'r' argument:
+To run unit tests, run the following:
 
-docker run --mount type=bind,source="$(pwd)",target=/myapp --env-file=config.env fifa run.py -r
+```bash
+docker run fifa -m pytest
+```
+
+Note - if tests fail, be sure that all model outputs exist and try again. You may need to rerun the Docker commands from above.
+### 5. Run the app
+Once the results from the model have been pushed to the RDS instance, run the following commands:
+
+```bash
+docker build -f app/Dockerfile -t flask .
+
+docker run -p 5000:5000 --env-file=config.env flask app.py
+```
+
+Then open port 5000 in your local browser and enjoy the app!
