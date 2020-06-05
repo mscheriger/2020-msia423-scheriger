@@ -152,15 +152,14 @@ docker run --mount type=bind,source="$(pwd)",target=/myapp --env-file=config.env
 ```
 
 Running the above won't acually run anything - you have to pass specific arguments. See the arguments below.
-
--c: create a bucket in S3
--p: Push data to S3 bucket
--f: Fetch the data from the S3 bucket 
--r: Create the RDS database schema
--e: Perform feature engineering
--m: Run the model
--x: Clean the predictions from the model
--a: Add the data to the RDS instance
+ -  -c: create a bucket in S3
+ -  -p: Push data to S3 bucket
+ -  -f: Fetch the data from the S3 bucket
+ -  -r: Create the RDS database schema
+ -  -e: Perform feature engineering
+ -  -m: Run the model
+ -  -x: Clean the predictions from the model
+ -  -a: Add the data to the RDS instance
 
 Note: To use a local sqlite database, change local = True and db_path to the location you would like to create the database. Both of these are in the rds portion of src/config.yaml
 
@@ -170,7 +169,7 @@ To run unit tests, run the following:
 docker run fifa -m pytest
 ```
 
-Note - if tests fail, be sure that all model outputs exist and try again. You may need to rerun the Docker commands from above.
+Note: if tests fail, be sure that all model outputs exist and try again. You may need to rerun the Docker commands from above.
 ### 5. Run the app
 Once the results from the model have been pushed to the RDS instance, run the following commands:
 
