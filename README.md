@@ -162,6 +162,8 @@ Running the above won't acually run anything - you have to pass specific argumen
 -x: Clean the predictions from the model
 -a: Add the data to the RDS instance
 
+Note: To use a local sqlite database, change local = True and db_path to the location you would like to create the database. Both of these are in the rds portion of src/config.yaml
+
 To run unit tests, run the following:
 
 ```bash

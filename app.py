@@ -6,7 +6,6 @@ from src.rds import Bets
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
 
-print("This is working")
 # Initialize the Flask application
 app = Flask("fifa", template_folder="app/templates", static_folder="app/static")
 
