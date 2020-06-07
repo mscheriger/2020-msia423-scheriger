@@ -20,6 +20,7 @@ if __name__=='__main__':
     parser.add_argument('-m', '--model', action='store_true', default=False, help='If given, runs model on clean data.')
     parser.add_argument('-x', '--clean_preds', action='store_true', default=False, help='If given, clean predictions from model')
     parser.add_argument('-a', '--add_data', action='store_true', default=False, help='If given, adds data to the RDS instance')
+    parser.add_argument('-w','--whole_pipeline',action='store_true', default=False, help='Run the entire model pipeline. Pull data from S3, feature engineering, model, clean predictions')
     args = parser.parse_args()
 
     ###READ CONFIG FILE
@@ -40,7 +41,7 @@ if __name__=='__main__':
         source_bucket(config_s3['bucket_name'],config_s3['location'])
     if args.push_to_bucket:
         push_data(config_s3['data_path'],config_s3['bucket_name'],config_s3['database_name'])
-    if args.fetch_data:
+    if args.fetch_data or args.whole_pipeline:
         get_data(config_s3['bucket_name'],config_s3['database_name'],config_s3['local_location'])
 
     ###Create RDS Schema
@@ -48,15 +49,15 @@ if __name__=='__main__':
         create_table(local=config_rds['local'],local_location=config_rds['db_path'])
 
     ###Data CLEANING AND FEATURE ENGINEERING
-    if args.engineer:
+    if args.engineer or args.whole_pipeline:
         run_all_feat_eng(config_feat['data_location'],config_feat['final_location'],config_feat['league_ids'],config_feat['droplabels'])
 
     ###Run the model
-    if args.model:
+    if args.model or args.whole_pipeline:
         run_all_model(config_model['data_location'],config_model['keep_cols'],config_model['season'],config_model['params'],config_model['objective'],config_model['num_class'],config_model['seed_xgb'],config_model['cv'],config_model['seed_cv'],config_model['final_location'])
     
     ###Clean predictions
-    if args.clean_preds:
+    if args.clean_preds or args.whole_pipeline:
         clean_pred(config_pred['pred_location'],config_pred['data_location'],config_pred['csv_location'],config_pred['home_lines'],config_pred['draw_lines'],config_pred['away_lines'],config_pred['db_location'],config_pred['keep_cols'])
     
     ###Add data to RDS
