@@ -28,11 +28,10 @@ DB_PW = os.environ.get('MYSQL_PASSWORD')
 DATABASE = os.environ.get('MYSQL_DATABASE')
 DB_DIALECT = 'mysql+pymysql'
 SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
-if SQLALCHEMY_DATABASE_URI is not None:
-    pass
-elif DB_HOST is None:
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///{}'.format(config_rds['db_path'])
-else:
-    SQLALCHEMY_DATABASE_URI = '{dialect}://{user}:{pw}@{host}:{port}/{db}'.format(dialect=DB_DIALECT, user=DB_USER,
+if SQLALCHEMY_DATABASE_URI is None:
+    if DB_HOST is None:
+        SQLALCHEMY_DATABASE_URI = 'sqlite:///{}'.format(config_rds['db_path'])
+    else:
+        SQLALCHEMY_DATABASE_URI = '{dialect}://{user}:{pw}@{host}:{port}/{db}'.format(dialect=DB_DIALECT, user=DB_USER,
                                                                                   pw=DB_PW, host=DB_HOST, port=DB_PORT,
                                                                                   db=DATABASE)
