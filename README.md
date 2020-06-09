@@ -162,6 +162,12 @@ Running the above won't acually run anything - you have to pass specific argumen
  -  -a: Add the data to the RDS instance
  -  -w: Run the entire model pipeline
 
+Finally, if you would like to use a local database (rather than rds), pass in the location of the database at the end of the Dockerfile. For example, if you have already run the model pipeline (see below) and would like to push those results to a local database, run the following and replace "my_database_name" with the name of your location:
+
+```bash
+docker run --mount type=bind,source="$(pwd)",target=/myapp fifa run.py -r -a my_database_name
+```
+
 To run the entire pipleline, run the following (you can manually input the environment variables rather than setting up a config.env file):
 
 ```bash
@@ -177,6 +183,7 @@ docker run fifa -m pytest
 ```
 
 Note: if tests fail, be sure that all model outputs exist and try again. You may need to rerun the Docker commands from above.
+
 ### 5. Run the app
 Once the results from the model have been pushed to the RDS instance, run the following commands:
 
@@ -185,5 +192,6 @@ docker build -f app/Dockerfile -t flask .
 
 docker run -p 5000:5000 --env-file=config.env flask app.py
 ```
+Like before, you can manually enter the environment variables using the -e argument rather than the --env-file argument. If you would like to use a local database as opposed to the RDS instance to run the app, be sure to add the SQLALCHEMY_DATABASE_URI environment variable
 
 Then open port 5000 in your local browser and enjoy the app!

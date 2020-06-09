@@ -101,6 +101,7 @@ def add_data(df_location,local=False,local_location=None):
     for index, row in df.iterrows():
         bet = Bets(match_id=row['id'], league_id = row['league_id'], season = row['season'], date = row['date'], home_team = row['home_team_name'], away_team = row['away_team_name'], home_line = row['home_line'], draw_line = row['draw_line'], away_line = row['away_line'], prob_home = row['home_prob'], prob_away = row['away_prob'], prob_draw = row['draw_prob'], goals_home = row['home_team_goal'], goals_away = row['away_team_goal'], outcome = row['team_outcome'], bet_on = row['bet_on'], exp_profit = row['exp_profit'], profit=row['profit'])
         try:
+            logging.debug(bet)
             session.add(bet)
             session.commit()
         except IntegrityError as e:
