@@ -5,6 +5,7 @@ import yaml
 import os
 import boto3
 from botocore.exceptions import ClientError
+from boto3.exceptions import S3UploadFailedError
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -47,6 +48,28 @@ def push_data(data_path,bucket_name,data_name):
         logging.error(e)
     except FileNotFoundError as e1:
         logging.error("Filepath cannot be found.")
+    except S3UploadFailedError as e2:
+        logging.error('The specified bucket does not exist. Try using the --create_bucket argument.')
+    pass
+
+def get_data(bucket_name,data_name,local_location='data/fifa_s3.db'):
+    '''
+    Function fetches data from s3 bucket
+    
+    @param bucket_name: Name of the S3 bucket
+    @param data_name:   Name of the data to be fetched from S3
+    @param location:    Local location to save the data
+    '''
+
+    session = boto3.session.Session(aws_access_key_id=os.environ.get("aws_access_key_id"),aws_secret_access_key=os.environ.get("aws_secret_access_key"))
+    s3 = session.resource('s3')
+    try:
+        logger.info('Fetching data')
+        bucket = s3.Bucket(bucket_name)
+        bucket.download_file(data_name,local_location)
+        logger.info('Data fetched')
+    except ClientError as e:
+        logging.error(e)
     pass
 
 if __name__=='__main__':
