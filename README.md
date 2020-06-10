@@ -161,11 +161,12 @@ Running the above won't acually run anything - you have to pass specific argumen
  -  -x: Clean the predictions from the model
  -  -a: Add the data to the RDS instance
  -  -w: Run the entire model pipeline
+ -  --db_location: Name of the local database (rather than RDS)
 
-Finally, if you would like to use a local database (rather than rds), pass in the location of the database at the end of the Dockerfile. For example, if you have already run the model pipeline (see below) and would like to push those results to a local database, run the following and replace "my_database_name" with the name of your location:
+If you would like to use a local database (rather than rds), pass in the location of the database at the end of the Dockerfile. For example, if you have already run the model pipeline (see below) and would like to push those results to a local database, run the following and replace "my_database_name" with the name of your location:
 
 ```bash
-docker run --mount type=bind,source="$(pwd)",target=/myapp fifa run.py -r -a my_database_name
+docker run --mount type=bind,source="$(pwd)",target=/myapp fifa run.py -r -a --db_location my_database_name
 ```
 
 To run the entire pipleline, run the following (you can manually input the environment variables rather than setting up a config.env file):
