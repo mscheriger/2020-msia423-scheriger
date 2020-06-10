@@ -3,7 +3,33 @@ source_s3:
     bucket_name: 'nw-scheriger-s3'
     database_name: 'fifa_raw'
     location: 'us-east-2'
-
+    local_location: 'data/fifa_s3.db'
 rds:
     local: False 
     db_path: 'data/temp.db'
+    pred_location: 'data/clean_predictions.csv'
+feat_eng:
+    data_location: 'data/fifa_s3.db'
+    final_location: 'data/clean_matches.csv'
+    league_ids: [1729,4769,7809,10257,21518]
+    droplabels: ['home_player_X1', 'home_player_X2', 'home_player_X3', 'home_player_X4', 'home_player_X5', 'home_player_X6', 'home_player_X7', 'home_player_X8', 'home_player_X9', 'home_player_X10', 'home_player_X11', 'home_player_Y1', 'home_player_Y2', 'home_player_Y3', 'home_player_Y4', 'home_player_Y5', 'home_player_Y6', 'home_player_Y7', 'home_player_Y8', 'home_player_Y9', 'home_player_Y10', 'home_player_Y11', 'away_player_X1', 'away_player_X2', 'away_player_X3', 'away_player_X4', 'away_player_X5', 'away_player_X6', 'away_player_X7', 'away_player_X8', 'away_player_X9', 'away_player_X10', 'away_player_X11', 'away_player_Y1', 'away_player_Y2', 'away_player_Y3', 'away_player_Y4', 'away_player_Y5', 'away_player_Y6', 'away_player_Y7', 'away_player_Y8', 'away_player_Y9', 'away_player_Y10', 'away_player_Y11', 'goal', 'shoton', 'shotoff', 'foulcommit', 'card', 'cross', 'corner', 'possession']
+model:
+    data_location: 'data/clean_matches.csv'
+    keep_cols: ['id','league_id', 'season', 'outcome', 'hp1', 'ap1', 'hp2', 'ap2', 'hp3', 'ap3', 'hp4', 'ap4', 'hp5', 'ap5', 'hp6', 'ap6', 'hp7', 'ap7', 'hp8', 'ap8', 'hp9', 'ap9', 'hp10', 'ap10', 'hp11', 'ap11', 'home_overall_rating', 'away_overall_rating', 'home_def_rating', 'away_def_rating', 'home_mid_rating', 'away_mid_rating', 'home_off_rating', 'away_off_rating', 'home_ewma', 'away_ewma']
+    season: '2015/2016'
+    params: {'min_child_weight':[1,2,3,4,5], 'gamma':[.3,.4,.5],  'subsample':[.6,.7,.8,.9,1],'colsample_bytree':[.6,.7,.8,.9,1], 'max_depth': [2,3,4]}
+    objective: 'multi:softmax'
+    num_class: 3
+    seed_xgb: 50
+    cv: 10
+    seed_cv: 100
+    final_location: 'data/predictions.csv'
+clean_pred:
+    pred_location: 'data/predictions.csv'
+    data_location: 'data/clean_matches.csv'
+    csv_location: 'data/clean_predictions.csv'
+    home_lines: ['B365H','BWH','IWH','LBH','PSH','WHH','SJH','VCH','GBH','BSH']
+    away_lines: ['B365A','BWA','IWA','LBA','PSA','WHA','SJA','VCA','GBA','BSA']
+    draw_lines: ['B365D','BWD','IWD','LBD','PSD','WHD','SJD','VCD','GBD','BSD']
+    db_location: 'data/fifa_s3.db'
+    keep_cols: ['id','league_id','season','date','home_team_name','away_team_name','home_line','draw_line','away_line','home_prob','away_prob','draw_prob','home_team_goal','away_team_goal','team_outcome','bet_on','exp_profit','profit']

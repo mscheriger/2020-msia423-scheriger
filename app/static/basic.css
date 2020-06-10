@@ -2,7 +2,16 @@
 
 body {
   height: 100%;
+  width: 100%;
   -webkit-font-smoothing: antialiased;
   font-family: 'Open Sans', sans-serif;
   background-color:#cdced8;
+}
+
+table {
+  border-spacing: 20px;
+}
+
+td{
+  padding: 30px;
 }
