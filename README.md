@@ -194,4 +194,4 @@ docker run -p 5000:5000 --env-file=config.env flask app.py
 ```
 Like before, you can manually enter the environment variables using the -e argument rather than the --env-file argument. If you would like to use a local database as opposed to the RDS instance to run the app, be sure to add the SQLALCHEMY_DATABASE_URI environment variable
 
-Then open port 5000 in your local browser and enjoy the app!
+Then open port 5000 in your local browser and enjoy the app! (Don't forget to kill the container when you're done)
