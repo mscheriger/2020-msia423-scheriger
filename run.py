@@ -21,7 +21,7 @@ if __name__=='__main__':
     parser.add_argument('-x', '--clean_preds', action='store_true', default=False, help='If given, clean predictions from model')
     parser.add_argument('-a', '--add_data', action='store_true', default=False, help='If given, adds data to the RDS instance')
     parser.add_argument('-w','--whole_pipeline',action='store_true', default=False, help='Run the entire model pipeline. Pull data from S3, feature engineering, model, clean predictions')
-    parser.add_argument('db_location',help='If using a local database (rather than RDS), pass the file location here')
+    parser.add_argument('--db_location', default=None, help='If using a local database (rather than RDS), pass the file location here')
     args = parser.parse_args()
 
     ###READ CONFIG FILE

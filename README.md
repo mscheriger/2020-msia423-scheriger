@@ -174,8 +174,6 @@ To run the entire pipleline, run the following (you can manually input the envir
 docker run --mount type=bind,source="$(pwd)",target=/myapp --env-file=config.env fifa run.py -w
 ```
 
-Note: To use a local sqlite database, change local = True and db_path to the location you would like to create the database. Both of these are in the rds portion of src/config.yaml
-
 To run unit tests, run the following:
 
 ```bash
