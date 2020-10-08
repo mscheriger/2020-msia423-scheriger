@@ -5,9 +5,8 @@
 
 - [Directory structure](#directory-structure)
 - [Charter](#charter)
-- [Planning](#planning)
-- [Backlog](#backlog)
-- [Icebox](#icebox)
+- [Disclaimer](#disclaimer)
+- [Conclusion](#conclusion)
 - [Running the app](#running-the-app)
   * [1. Download the Data](#download-the-data)
   * [2. Create Bucket and Push to S3](#2-create-bucket-and-push-to-s3)
@@ -61,7 +60,7 @@
 ```
 ## Charter
 ### Vision
-Develop a profitable method for betting on European soccer matches.
+Develop a profitable method for betting on European soccer matches using FIFA ratings.
 
 ### Mission
 Create an app where the user selects the European soccer league, and the app determines who the user should bet on for each game in 2016. The app will use a machine learning model using FIFA ratings to accurately predict outcomes of European soccer matches. The app will then select wager and bookmaker such that expected profit is maximized, and the user will see how this strategy performed in 2016. The data to be used contains match results for all European soccer matches from 2008 - 2016, corresponding FIFA ratings, and odds from 10 different bookmakers. The database can be found here: https://www.kaggle.com/hugomathien/soccer.
@@ -72,47 +71,11 @@ The project will truly be successful if we can demonstrate that a strategy using
 #### 2. CCR
 In order to turn a profit, the machine learning model must have a superior accuracy to the bookmakers. Therefore, maximizing CCR will lead to a higher profit. According to the data source, bookmakers correctly predict the outcome (win/lose/draw) 53% of the time. Any results greater than this will be sufficient. 
 
-## Planning
+## Disclaimer
+In order to be able to run all possible commands using the Dockerfile and reproduce the results, you will require an S3 bucket as well as an RDS instance.
 
-### Initiative
-Develop a model that allows the user to profitably gamble on European soccer matches.
-
-### Epics and Stories
-#### Epic 1. Pipeline: Construct a data pipeline that allows for rapid model development.
- -  Story 1: Merge relevant data tables together and clean them in order to be ready for model training. 
- -  Story 2: Assess robustness of data for each year and league - is there enough to make predictions?  
- -  Story 3: Develop pipeline so that data can be pulled regardless of host
- -  Story 4: Expand pipeline to include data through 2020. Will need to explore other datasets/APIs.
- 
-#### Epic 2. Model: Develop a machine learning model that predicts match outcomes.
- - Story 1: Perform exploratory data analysis to check missing values and interactions between variables that may affect the model.
- - Story 2: Engineer features such as FIFA rating by position, moving average of wins, goals for, goals against, etc.
- - Story 3: Create functionality to train model on data from 2008 - 2014, and test on 2015, as well as predicting results for 2016. 
- - Story 4: Develop functionality to train model based on league selected by user. 
- - Story 5: Iterate in order to improve model until threshold of 53% CCR has been met.
-  
-#### Epic 3. App: Create application to show user which outcomes to bet on.
- - Story 1. Create interface to display model predictions as well as actual outcomes.
- - Story 2. Add additional functionality to allow user to select which European league to predict. 
- - Story 3. Display total net profit if one unit was wagered on every game.
- - Story 4. Use D3 to visualize matches where the model outperformed the bookkeepers, as well as improvements that can be made. 
-## Backlog
-In order of priority:
-1. Pipeline.Story1 (4 points) - PLANNED
-2. Pipeline.Story2 (1 point) - PLANNED
-3. Model.Story1 (2 points) - PLANNED
-3. Model.Story2 (4 points) - PLANNED
-4. Pipeline.Story3 (8 points)
-5. Model.Story3 (4 points)
-6. Model.Story4 (2 points)
-7. Model.Story5 (4 points)
-8. App.Story1 (8 points)
-9. App.Story2 (4 points)
-10. App.Story3 (2 points)
-
-## Icebox
-1. Pipeline.Story4
-2. App.Story4
+## Conclusion
+The final model was an XGBoost classification tree that yielded an accuracy in 2016 of 51%. While this was below the target of 53%, the model did produce a modest profit. The most important features were the exponentially weighted moving average of the teams' recent performances, where a win counted as 1, a tie counted as 0, and a loss counted as -1 (see src/feat_eng.py).
 
 ## Running the app
 
